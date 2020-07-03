@@ -17,10 +17,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class LoginActivity extends AppCompatActivity {
 
     public static FirebaseAuth mAuth;
+    public static FirebaseFirestore db;
+
     private EditText ed_email, ed_password;
     private Button bt_login, bt_signup;
     private ProgressBar progressBar;
@@ -31,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
 
         ed_email = findViewById(R.id.ed_email);
         ed_password = findViewById(R.id.ed_password);
@@ -53,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = ed_email.getText().toString();
                 String password = ed_password.getText().toString();
 
-                // check fields
+                //todo check fields
 
                 progressBar.setVisibility(View.VISIBLE);
 

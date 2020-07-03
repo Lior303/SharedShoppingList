@@ -41,7 +41,7 @@ public class SignUpActivity extends AppCompatActivity {
                 String email = ed_email.getText().toString();
                 String password = ed_password.getText().toString();
 
-                // check fields
+                //todo check fields
 
                 progressBar.setVisibility(View.VISIBLE);
 
