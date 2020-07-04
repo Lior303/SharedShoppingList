@@ -40,6 +40,7 @@
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
+        android:password="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,4 +81,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.357" />
+
+    <ImageButton
+        android:id="@+id/eyePassL"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+
+        android:layout_marginStart="8dp"
+        android:background="#00FFFFFF"
+        android:foreground="@drawable/eye"
+        app:layout_constraintBottom_toBottomOf="@+id/ed_password"
+        app:layout_constraintStart_toEndOf="@+id/ed_password"
+        app:layout_constraintTop_toTopOf="@+id/ed_password"
+        app:srcCompat="@drawable/eye" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -152,7 +152,7 @@ public class ListAdapter extends BaseAdapter {
                                                 if (add)
                                                     Toast.makeText(context, "New contributor added successfully", Toast.LENGTH_LONG).show();
                                                 else
-                                                    Toast.makeText(context, "New contributor deleted successfully", Toast.LENGTH_LONG).show();
+                                                    Toast.makeText(context, "Contributor deleted successfully", Toast.LENGTH_LONG).show();
                                         }
                                     });
                         }
