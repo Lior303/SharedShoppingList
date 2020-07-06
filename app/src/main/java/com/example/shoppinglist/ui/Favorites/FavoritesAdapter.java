@@ -13,8 +13,11 @@ import com.example.shoppinglist.LoginActivity;
 import com.example.shoppinglist.R;
 import com.example.shoppinglist.ui.allLists.ShoppingList;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FavoritesAdapter extends BaseAdapter {
 
@@ -44,7 +47,7 @@ public class FavoritesAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.favorites_layout, null);
 
         TextView tv_mail, tv_nickname;
@@ -60,7 +63,8 @@ public class FavoritesAdapter extends BaseAdapter {
         iv_remove_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                favorites.remove(position);
+                FavoritesFragment.writeToSharedPreferences();
             }
         });
 

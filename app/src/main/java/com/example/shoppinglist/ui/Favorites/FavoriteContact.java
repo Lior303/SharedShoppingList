@@ -1,6 +1,6 @@
 package com.example.shoppinglist.ui.Favorites;
 
-public class FavoriteContact {
+public class FavoriteContact implements Comparable {
 
     private String mail;
     private String nickname;
@@ -24,5 +24,10 @@ public class FavoriteContact {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return nickname.compareTo((String) o);
     }
 }

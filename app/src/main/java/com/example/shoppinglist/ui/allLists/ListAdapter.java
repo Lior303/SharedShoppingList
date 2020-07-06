@@ -17,12 +17,17 @@ import androidx.annotation.NonNull;
 
 import com.example.shoppinglist.LoginActivity;
 import com.example.shoppinglist.R;
+import com.example.shoppinglist.SignUpActivity;
+import com.example.shoppinglist.ui.Favorites.FavoriteContact;
+import com.example.shoppinglist.ui.Favorites.FavoritesFragment;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class ListAdapter extends BaseAdapter {
@@ -87,14 +92,18 @@ public class ListAdapter extends BaseAdapter {
         iv_add_cont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddContributorDialog("Add New Contributor", position, true);
+                if (finalOwner.equals("You"))
+                    showAddContributorDialog("Add New Contributor", position, true);
+                else Toast.makeText(context, "Cant add contributors because you are not owner", Toast.LENGTH_LONG).show();
             }
         });
 
         iv_remove_cont.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showAddContributorDialog("Remove Contributor", position, false);
+                if (finalOwner.equals("You"))
+                    showAddContributorDialog("Remove Contributor", position, false);
+                else Toast.makeText(context, "Cant remove contributors because you are not owner", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -112,10 +121,18 @@ public class ListAdapter extends BaseAdapter {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 EditText et_mail = customLayout.findViewById(R.id.ed_dialog_email);
+                if (et_mail.getText().toString().isEmpty()) {
+                    Toast.makeText(context, "Field cannot be empty", Toast.LENGTH_LONG).show();
 
-                //todo check fields
+                    //לפי ניק
+                } else if (!SignUpActivity.isEmailValid(et_mail.getText().toString())) {
+                    String mail_from_nick = getMailFromNick(et_mail.getText().toString());
+                    if (mail_from_nick.equals("null")) {
+                        Toast.makeText(context, "No such favorite", Toast.LENGTH_LONG).show();
 
-                addOrRemoveContributor(shoppingList.get(position), et_mail.getText().toString(), add);
+                    } else addOrRemoveContributor(shoppingList.get(position), mail_from_nick, add);
+                } else
+                    addOrRemoveContributor(shoppingList.get(position), et_mail.getText().toString(), add);
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -171,5 +188,24 @@ public class ListAdapter extends BaseAdapter {
                             Toast.makeText(context, "Error occured", Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    private String getMailFromNick(String nick) {
+        Gson gson = new Gson();
+        ArrayList<FavoriteContact> arrayList = null;
+        if (FavoritesFragment.sharedPreferences_fav == null)
+            FavoritesFragment.sharedPreferences_fav = activity.getSharedPreferences("FavSharedPrefs", Context.MODE_PRIVATE);
+        String json = FavoritesFragment.sharedPreferences_fav.getString("fav", "");
+        if (!json.equals("")) {
+            Type typeMyType = new TypeToken<ArrayList<FavoriteContact>>() {
+            }.getType();
+            arrayList = gson.fromJson(json, typeMyType);
+
+            for (FavoriteContact favorite : arrayList) {
+                if (favorite.getNickname().equals(nick))
+                    return favorite.getMail();
+            }
+        }
+        return "null";
     }
 }
