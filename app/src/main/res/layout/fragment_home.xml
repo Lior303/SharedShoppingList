@@ -17,10 +17,12 @@
 
     <TextView
         android:id="@+id/tv_shopingList_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="204dp"
+        android:layout_height="32dp"
         android:layout_marginTop="16dp"
-        android:text="Shopping list  N/A"
+        android:gravity="center"
+        android:text="Shopping list:  N/A"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,10 +40,12 @@
         app:srcCompat="@drawable/ic__add" />
 
     <ListView
-        android:layout_width="409dp"
-        android:layout_height="562dp"
-        android:layout_marginTop="1dp"
+        android:id="@+id/lv_items_lists"
+        android:layout_width="408dp"
+        android:layout_height="504dp"
+        android:layout_marginTop="48dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.333"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

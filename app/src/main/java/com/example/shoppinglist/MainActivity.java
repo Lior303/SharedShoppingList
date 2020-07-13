@@ -1,13 +1,16 @@
 package com.example.shoppinglist;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.annotation.NonNull;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -27,14 +30,12 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_all_lists, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_all_lists, R.id.nav_slideshow, R.id.nav_exit)
                 .setDrawerLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -53,12 +54,15 @@ public class MainActivity extends AppCompatActivity {
 //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
 //
 //        switch (item.getItemId()) {
-//            case R.id.action_addList:
-//                Toast.makeText(this, "add list", Toast.LENGTH_LONG).show();
+//            case R.id.nav_exit:
+//                Toast.makeText(this, "ddd", Toast.LENGTH_LONG).show();
 //                break;
-//            case R.id.action_settings:
-//                Toast.makeText(this, "settings", Toast.LENGTH_LONG).show();
-//                break;
+////            case R.id.action_addList:
+////                Toast.makeText(this, "add list", Toast.LENGTH_LONG).show();
+////                break;
+////            case R.id.action_settings:
+////                Toast.makeText(this, "settings", Toast.LENGTH_LONG).show();
+////                break;
 //        }
 //
 //        return true;

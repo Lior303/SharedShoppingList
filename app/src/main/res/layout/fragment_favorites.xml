@@ -20,8 +20,8 @@
 
     <ListView
         android:id="@+id/lv_favorites_contacts"
-        android:layout_width="393dp"
-        android:layout_height="654dp"
+        android:layout_width="396dp"
+        android:layout_height="587dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
