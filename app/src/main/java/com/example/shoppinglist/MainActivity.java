@@ -50,28 +50,16 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case R.id.nav_exit:
-//                Toast.makeText(this, "ddd", Toast.LENGTH_LONG).show();
-//                break;
-////            case R.id.action_addList:
-////                Toast.makeText(this, "add list", Toast.LENGTH_LONG).show();
-////                break;
-////            case R.id.action_settings:
-////                Toast.makeText(this, "settings", Toast.LENGTH_LONG).show();
-////                break;
-//        }
-//
-//        return true;
-//    }
-
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finishAffinity();
     }
 }

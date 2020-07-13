@@ -22,4 +22,10 @@
         android:name="com.example.shoppinglist.ui.Favorites.FavoritesFragment"
         android:label="Favorites"
         tools:layout="@layout/fragment_favorites" />
+
+    <fragment
+        android:id="@+id/nav_exit"
+        android:name="com.example.shoppinglist.ui.SignOut.SignOutFragment"
+        android:label="Sign Out"
+        tools:layout="@layout/fragment_exit" />
 </navigation>
