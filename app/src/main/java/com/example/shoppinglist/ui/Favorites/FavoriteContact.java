@@ -28,6 +28,10 @@ public class FavoriteContact implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return nickname.compareTo((String) o);
+        if (o instanceof FavoriteContact) {
+            FavoriteContact favoriteContact = (FavoriteContact) o;
+            return nickname.compareTo(favoriteContact.getNickname());
+        }
+        return -1;
     }
 }

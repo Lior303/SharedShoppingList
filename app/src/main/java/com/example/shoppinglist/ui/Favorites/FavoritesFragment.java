@@ -70,7 +70,6 @@ public class FavoritesFragment extends Fragment {
 
             // Collection
             Collections.sort(arrayList);
-
         }
 
         adapter = new FavoritesAdapter(getContext(), getActivity(), arrayList);

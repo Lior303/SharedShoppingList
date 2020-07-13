@@ -2,7 +2,10 @@ package com.example.shoppinglist.ui.home;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -62,6 +65,8 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        setHasOptionsMenu(true);
+
         tv_shoppingList_name = getView().findViewById(R.id.tv_shopingList_name);
         FloatingActionButton fab = getView().findViewById(R.id.fab);
         lv_items_list = getView().findViewById(R.id.lv_items_lists);
@@ -71,8 +76,6 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             public void onClick(View view) {
                 Snackbar.make(view, "Add new item to this list", Snackbar.LENGTH_LONG)
                         .setAction("Add", null).show();
-
-                //todo - update firebase realtime
 
                 final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
                 final View mView = getLayoutInflater().inflate(R.layout.dialog_add_new_item, null);
@@ -99,6 +102,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                             Item item = new Item(name, quantity, false);
                             items_array.add(item);
                             adapter.notifyDataSetChanged();
+                            Collections.sort(items_array);
 
                             db.collection("ShoppingLists")
                                     .document(doc_ref)
@@ -138,6 +142,76 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                showSearchDialog();
+                break;
+        }
+        return true;
+    }
+
+    private void showSearchDialog() {
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        final View mView = getLayoutInflater().inflate(R.layout.search_item_dialog, null);
+        final EditText et_search_by_name = mView.findViewById(R.id.ed_search_by_name_item);
+        final ListView lv_searched_items = mView.findViewById(R.id.lv_seached_items);
+
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+        dialog.show();
+
+        et_search_by_name.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                final ArrayList<String> items_names = new ArrayList<>();
+                final String search_name = et_search_by_name.getText().toString();
+                for (Item item: items_array) {
+                    String name = item.getName();
+                    if (name.startsWith(search_name) || name.endsWith(search_name) || name.contains(search_name))
+                        items_names.add(name);
+                }
+                ArrayAdapter names_adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, items_names);
+                lv_searched_items.setAdapter(names_adapter);
+
+                lv_searched_items.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Item item = null;
+                        for (Item temp: items_array) {
+                            if (temp.getName().equals(items_names.get(position)))
+                                item = temp;
+                        }
+                        items_array = new ArrayList<>();
+                        items_array.add(item);
+
+                        adapter = new ItemsListAdapter(getContext(), getActivity(), items_array, new MyAdapterCallback() {
+                            @Override
+                            public void actionWhenFinished(Item item) {
+                                adapter.notifyDataSetChanged();
+                                Collections.sort(items_array);
+                                updateItemOnDB(item, doc_ref);
+                            }
+                        });
+                        lv_items_list.setAdapter(adapter);
+
+                        dialog.dismiss();
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         String listName = parent.getItemAtPosition(position).toString();
         tv_shoppingList_name.setText("Shopping list " + listName);
@@ -170,6 +244,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
                                                     @Override
                                                     public void actionWhenFinished(Item item) {
                                                         adapter.notifyDataSetChanged();
+                                                        Collections.sort(items_array);
                                                         updateItemOnDB(item, doc_ref);
                                                     }
                                                 });
