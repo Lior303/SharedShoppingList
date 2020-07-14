@@ -117,7 +117,15 @@ public class FavoritesFragment extends Fragment {
                         et_nick.requestFocus();
                         return;
                     }
-                    arrayList.add(new FavoriteContact(mail, nickname));
+
+                    FavoriteContact favoriteContact = new FavoriteContact(mail, nickname);
+
+                    if (arrayList.contains(favoriteContact)) {
+                        Toast.makeText(getContext(), "This nickname already exists", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    arrayList.add(favoriteContact);
                     adapter.notifyDataSetChanged();
                     writeToSharedPreferences();
                     dialog.dismiss();

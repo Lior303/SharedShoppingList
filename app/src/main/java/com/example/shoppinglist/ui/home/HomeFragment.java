@@ -76,63 +76,7 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             public void onClick(View view) {
                 Snackbar.make(view, "Add new item to this list", Snackbar.LENGTH_LONG)
                         .setAction("Add", null).show();
-
-                final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
-                final View mView = getLayoutInflater().inflate(R.layout.dialog_add_new_item, null);
-                final EditText et_quantity = mView.findViewById(R.id.ed_new_item_quantity);
-                final EditText et_name = mView.findViewById(R.id.et_new_item_name);
-
-                Button btn_ok = mView.findViewById(R.id.btn_ok_item);
-                Button ban_cancel = mView.findViewById(R.id.btn_cancel_item);
-                mBuilder.setView(mView);
-                final AlertDialog dialog = mBuilder.create();
-
-                btn_ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            String name = et_name.getText().toString();
-
-                            ////////////////      Exception handling   ///////////////////
-                            if (name.isEmpty())
-                                throw new Exception("name cannot be empty");
-                            int quantity = Integer.parseInt(et_quantity.getText().toString()); // can throw exception
-                            ///////////////////////////////////
-
-                            Item item = new Item(name, quantity, false);
-                            items_array.add(item);
-                            adapter.notifyDataSetChanged();
-                            Collections.sort(items_array);
-
-                            db.collection("ShoppingLists")
-                                    .document(doc_ref)
-                                    .collection("Items")
-                                    .document(item.getName())
-                                    .set(item)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if (task.isSuccessful()) {
-                                                Toast.makeText(getContext(), "Item updated on db", Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                    });
-
-                            dialog.dismiss();
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            Toast.makeText(getContext(), "Fields cannot be empty", Toast.LENGTH_LONG).show();
-                        }
-                    }
-
-                });
-                ban_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
+                showAddItemDialog();
             }
         });
 
@@ -147,8 +91,84 @@ public class HomeFragment extends Fragment implements AdapterView.OnItemSelected
             case R.id.action_search:
                 showSearchDialog();
                 break;
+            case R.id.action_addList:
+                showAddItemDialog();
+                break;
         }
         return true;
+    }
+
+    private void showAddItemDialog() {
+        final AlertDialog.Builder mBuilder = new AlertDialog.Builder(getActivity());
+        final View mView = getLayoutInflater().inflate(R.layout.dialog_add_new_item, null);
+        final EditText et_quantity = mView.findViewById(R.id.ed_new_item_quantity);
+        final EditText et_name = mView.findViewById(R.id.et_new_item_name);
+
+        Button btn_ok = mView.findViewById(R.id.btn_ok_item);
+        Button ban_cancel = mView.findViewById(R.id.btn_cancel_item);
+        mBuilder.setView(mView);
+        final AlertDialog dialog = mBuilder.create();
+
+        btn_ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    String name = et_name.getText().toString();
+
+                    ////////////////      Exception handling   ///////////////////
+                    if (name.isEmpty())
+                        throw new Exception("name cannot be empty");
+                    int quantity = Integer.parseInt(et_quantity.getText().toString()); // can throw exception
+                    if (quantity == 0)
+                        throw new Exception("Quantity cannot be zero");
+                    ///////////////////////////////////
+
+                    Item item = new Item(name, quantity, false);
+
+                    if (items_array.contains(item)) {
+                        Toast.makeText(getContext(), "This item already in the list", Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                        return;
+                    }
+
+                    items_array.add(item);
+                    adapter.notifyDataSetChanged();
+                    Collections.sort(items_array);
+
+                    db.collection("ShoppingLists")
+                            .document(doc_ref)
+                            .collection("Items")
+                            .document(item.getName())
+                            .set(item)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Toast.makeText(getContext(), "Item updated on db", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+
+                    dialog.dismiss();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    String msg = "Fields cannot be empty";
+                    if (e.getMessage().equals("Quantity cannot be zero"))
+                        msg = e.getMessage();
+                    else if (e.getMessage().equals("name cannot be empty"))
+                        msg = e.getMessage();
+                    Toast.makeText(getContext(), msg, Toast.LENGTH_LONG).show();
+                }
+            }
+
+        });
+        ban_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private void showSearchDialog() {

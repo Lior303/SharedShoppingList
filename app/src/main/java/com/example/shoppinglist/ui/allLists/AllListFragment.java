@@ -117,7 +117,7 @@ public class AllListFragment extends Fragment {
 
     private void addNewList() {
         final EditText editText = new EditText(getContext());
-        AlertDialog dialog = new AlertDialog.Builder(getContext())
+        final AlertDialog dialog = new AlertDialog.Builder(getContext())
                 .setTitle("Add New List")
                 .setMessage("Enter list name:")
                 .setView(editText)
@@ -125,6 +125,7 @@ public class AllListFragment extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         String editTextInput = editText.getText().toString();
+
                         Map<String, Object> new_list = new HashMap<>();
                         new_list.put("list_name", editTextInput);
                         new_list.put("owner", mail);
@@ -134,6 +135,11 @@ public class AllListFragment extends Fragment {
                         new_list.put("cont", cont);
 
                         final ShoppingList new_list_obj = new ShoppingList(mail, editTextInput, cont, "");
+
+                        if (shoppingList.contains(new_list_obj)) {
+                            Toast.makeText(getContext(), "This list already exists", Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
                         db.collection("ShoppingLists")
                                 .add(new_list)

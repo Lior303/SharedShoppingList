@@ -1,5 +1,7 @@
 package com.example.shoppinglist.ui.Favorites;
 
+import androidx.annotation.Nullable;
+
 public class FavoriteContact implements Comparable {
 
     private String mail;
@@ -24,6 +26,15 @@ public class FavoriteContact implements Comparable {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof FavoriteContact) {
+            FavoriteContact temp_obj = (FavoriteContact) obj;
+            return this.nickname.equals(temp_obj.getNickname());
+        }
+        return false;
     }
 
     @Override

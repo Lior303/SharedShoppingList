@@ -1,5 +1,7 @@
 package com.example.shoppinglist.ui.allLists;
 
+import androidx.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -47,5 +49,14 @@ public class ShoppingList {
 
     public void setCont(ArrayList<String> cont) {
         this.cont = cont;
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof ShoppingList) {
+            ShoppingList temp_obj = (ShoppingList) obj;
+            return this.list_name.equals(temp_obj.getList_name());
+        }
+        return false;
     }
 }

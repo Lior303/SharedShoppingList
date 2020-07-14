@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.shoppinglist.LoginActivity;
 import com.example.shoppinglist.R;
@@ -63,6 +64,7 @@ public class FavoritesAdapter extends BaseAdapter {
         iv_remove_fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(context, "nickname " + favorites.get(position).getNickname() + " removed", Toast.LENGTH_LONG).show();
                 favorites.remove(position);
                 FavoritesFragment.writeToSharedPreferences();
             }
