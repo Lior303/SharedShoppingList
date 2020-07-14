@@ -90,6 +90,11 @@ public class SignUpActivity extends AppCompatActivity {
                     ed_password.requestFocus();
                     return;
                 }
+                else if (ed_password.length() > 12) {
+                    ed_password.setError("Password length must be less than or equal to 12 characters");
+                    ed_password.requestFocus();
+                    return;
+                }
 
                 String email = ed_email.getText().toString().trim();
                 String password = ed_password.getText().toString().trim();
