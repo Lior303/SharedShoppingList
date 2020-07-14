@@ -31,7 +31,8 @@ public class SignUpActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth mAuth = LoginActivity.mAuth;
     private ImageView eyePass;
-    //בודק מחרוזת בתבנית של מייל
+
+    // check validity of email address
     public static boolean isEmailValid(String email) {
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}[ ]*$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
@@ -68,10 +69,9 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-
                 ed_email.requestFocus();
 
-                //בדיקות של השדות
+                // check fields
                 if (ed_email.getText().toString().isEmpty()) {
                     ed_email.setError("Email cannot be empty");
                     ed_email.requestFocus();
@@ -81,7 +81,12 @@ public class SignUpActivity extends AppCompatActivity {
                     ed_email.requestFocus();
                     return;
                 } else if (ed_password.getText().toString().isEmpty()) {
-                    ed_password.setError("password cannot be empty");
+                    ed_password.setError("Password cannot be empty");
+                    ed_password.requestFocus();
+                    return;
+                }
+                else if (ed_password.length() < 6) {
+                    ed_password.setError("Password length must be at least 6 characters");
                     ed_password.requestFocus();
                     return;
                 }
